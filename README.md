@@ -50,24 +50,30 @@ To run a specific test class from the command line:
 
 ```text
 restapi/
+│
 ├── src/
 │   ├── main/
 │   │   ├── java/com/example/restapi/
-│   │   │   └── RestapiApplication.java (Spring Boot Application entrypoint)
-│   │   |   ├── models                   # POJOs for payload serialization
-|    |   |
+│   │   │   ├── RestapiApplication.java          # Spring Boot entrypoint
+│   │   │   └── models/                          # POJOs for payload serialization
+│   │   │
 │   │   └── resources/
-│   │       └── application.properties   (Configuration for target API & logs)
+│   │       └── application.properties           # API + logging configuration
+│   │
 │   └── test/
 │       ├── java/com/example/restapi/
-│       │   ├── CucumberTestRunner.java (BDD Test Suite configuration)
+│       │   ├── CucumberTestRunner.java          # BDD test suite runner
 │       │   ├── context/
-│       │   │   └── TestContext.java    (Scenario state sharing context)
+│       │   │   └── TestContext.java             # Shared scenario state
 │       │   └── steps/
-│       │       ├── CucumberSpringConfiguration.java (Spring context glue)
-│       │       └── ObjectSteps.java    (Step definitions & assertions)
+│       │       ├── CucumberSpringConfiguration.java   # Spring test glue
+│       │       └── ObjectSteps.java             # Step definitions & assertions
+│       │
 │       └── resources/
-│           └── object_management.feature (Gherkin test scenarios)
-└── pom.xml (Maven dependencies & build plugins)
+│           ├── features/
+│           │   └── object_management.feature    # Gherkin scenarios
+│           └── CucumberSpringConfiguration.java # Spring context glue (if needed)
+│
+├── pom.xml                                      # Maven build + dependencies
 └── README.md
 ```

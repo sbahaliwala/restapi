@@ -2,6 +2,8 @@ package com.example.restapi.context;
 
 import io.restassured.response.Response;
 import lombok.Data;
+import java.util.Map;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -12,4 +14,5 @@ public class TestContext {
     private Response response;
     private String savedObjectId;
     private Object savedPayload;
+    private Map<String, String> newObject;
 }

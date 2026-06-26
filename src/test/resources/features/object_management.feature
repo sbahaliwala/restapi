@@ -1,7 +1,7 @@
 Feature: Restful API Object Management
   As an API consumer
   I want to manage objects via CRUD endpoints
-  So that data remains consistent and secure
+  So that data remains consistent
 
   Background:
     Given the API client is authenticated and ready
@@ -26,6 +26,7 @@ Feature: Restful API Object Management
     When I delete the created object
     Then the response status code should be 200
     And the deletion message should confirm the object was deleted
+  # ---
   # --- Negative Scenarios ---  
 
   @Negative @Validation
@@ -33,6 +34,7 @@ Feature: Restful API Object Management
     When I attempt to retrieve an object with ID "non_existent_id_12345"
     Then the response status code should be 404
     And the error message should contain "not found"
+  # ---
   # --- Edge-case Scenarios ---
 
   @EdgeCase
