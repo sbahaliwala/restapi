@@ -1,7 +1,26 @@
 # RestAPI Test Suite
 
-A clean, modern E2E and API testing suite built with **Spring Boot**, **Cucumber BDD**, and **RestAssured** for verifying the RESTful Objects API.
+A clean, modern E2E API testing suite built with **Spring**, **Cucumber BDD**, and **RestAssured** for verifying the RESTful Objects API.
 
+---
+## Requirements Implementation Summary
+**1. Required Features**
+
+- Multi-Call REST Automation: Automated end-to-end CRUD flows (e.g., creating an object with a POST request, verifying its retrieval with a GET, and performing cleanup via DELETE) in 
+`object_management.feature`.
+- Clean Code & Method Design: Centralized all HTTP logic into a dedicated `ApiClient` component.
+- Scenario State Sharing: Using Spring-scoped bean (`TestContext` with @Scope("cucumber-glue")) to share dynamic data (such as HTTP responses, payloads, and resource IDs) between Cucumber step definitions.
+- Error & Edge Case Testing: Implemented scenarios tagged with @Negative and @EdgeCase in `object_management.feature` to validate scenario for invalid IDs and idempotency checks.
+- Cucumber BDD Framework: Implemented Gherkin features with a JUnit 5 runner (`CucumberTestRunner.java`) for tag‑based execution
+- Robust JSON Path Assertions: Validated nested fields and dynamic keys in `ObjectSteps.java` using RestAssured JsonPath.
+- Extended Test Scenarios: Added negative flows and idempotency tests beyond standard happy‑path cases.
+  
+**2. Nice-to-Have Features**
+
+- Git Version Control: Clean history and local configurations tracked using Git.
+- Lifecycle Setup & Cleanup Hooks: Implemented Cucumber @After lifecycle hooks in `Hooks.java` for automatic teardown and orphan cleanup.
+- Conditional API Key Authentication: `ApiClient` adds x-api-key only when running under the test profile.
+- Spring Boot & Lombok Integration: Used Spring DI and Lombok (@Data, @Builder, @Slf4j) to reduce boilerplate and unify logging.
 ---
 
 ## How to Install & Run This Spring Boot Maven Project
@@ -56,28 +75,14 @@ Options available are:
 
 ---
 
-## Reporting [![Cucumber Reports](https://img.shields.io/badge/reports-Cucumber-green.svg)](#cucumber-test-reports)
+## Reporting
 
 This project includes Cucumber BDD test execution reports to help visualize scenario results, step‑level execution, and failure details.
-After running the test suite (mvn test), Cucumber generates structured reports under:
-target/cucumber-reports/
+After running the test suite (mvn test), Cucumber generates structured reports under: **target/cucumber-reports/**
+
 The reporting bundle typically includes:
 - HTML Report — human‑readable summary of all features, scenarios, and steps
 - JSON Report — machine‑readable output for CI/CD integrations
-
-These reports provide:
-- Clear pass/fail breakdown of all scenarios
-- Step‑level execution logs and error traces
-- Tags, hooks, and scenario metadata
-- Easy debugging for failed steps
-
-If you open the HTML report locally, you’ll see a structured dashboard showing:
-- Feature‑wise grouping
-- Scenario execution timeline
-- Failed step stack traces
-- Embedded logs or screenshots (if configured)
-
-This makes it easier to track test coverage, debug failures, and monitor regression stability across builds.
 
 ---
 
