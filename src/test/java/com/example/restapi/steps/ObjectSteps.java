@@ -1,19 +1,16 @@
 package com.example.restapi.steps;
 
+import com.example.restapi.client.ApiClient;
 import com.example.restapi.context.TestContext;
 import com.example.restapi.models.ObjectRequest;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.*;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
-import io.restassured.specification.RequestSpecification;
+import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,11 +20,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @Slf4j
 public class ObjectSteps {
 
-    @Value("${server.url}")
-    private String baseURI;
-
-    @Value("${server.api-key}")
-    private String apiKey;
+    @Autowired
+    private ApiClient apiClient;
 
     @Autowired
     private TestContext context;
@@ -38,13 +32,12 @@ public class ObjectSteps {
 
     @Given("the API client is authenticated and ready")
     public void configureApi() {
-        RestAssured.baseURI = baseURI;
-        log.debug("Base URL set to :{}", RestAssured.baseURI);
+        apiClient.configureApi();
     }
 
     @When("I query all objects")
     public void verifyRetrieveAll() {
-        var response = requestWithApiKey().get();
+        Response response = apiClient.execute("GET", "/");
         context.setResponse(response);
         log.debug("Response{}", response.getBody().asString());
     }
@@ -77,9 +70,7 @@ public class ObjectSteps {
 
     @When("I retrieve the created object by its ID")
     public void retrieveObject() {
-        var response = requestWithApiKey()
-                .get("/" + context.getSavedObjectId());
-
+        var response = apiClient.execute("GET", "/" + context.getSavedObjectId());
         context.setResponse(response);
         log.debug("Response{}", response.getBody().asString());
     }
@@ -97,9 +88,7 @@ public class ObjectSteps {
 
     @When("I delete the created object")
     public void deleteObject() {
-        var response = requestWithApiKey()
-                .delete("/" + context.getSavedObjectId());
-
+        var response = apiClient.execute("DELETE", "/" + context.getSavedObjectId());
         context.setResponse(response);
         log.debug("Response{}", response.getBody().asString());
     }
@@ -112,8 +101,7 @@ public class ObjectSteps {
 
     @When("I attempt to retrieve an object with ID {string}")
     public void getInvalidObject(String invalidId) {
-        var response = requestWithApiKey()
-                .get("/" + invalidId);
+        var response = apiClient.execute("GET", "/" + invalidId);
         context.setResponse(response);
         log.debug("Response{}", response.getBody().asString());
     }
@@ -203,9 +191,7 @@ public class ObjectSteps {
         log.debug("Request payload {}:", requestPayload);
 
         // POST request with API key and JSON body
-        var response = requestWithApiKey()
-                .body(requestPayload)
-                .post();
+        var response = apiClient.execute("POST", "/", requestPayload);
 
         log.debug("Response Status Code : {}", response.getStatusCode());
         log.debug("Response Body : {}", response.getBody().asString());
@@ -216,12 +202,6 @@ public class ObjectSteps {
             context.setSavedObjectId(extractedId);
             context.setNewObject(null);
         }
-    }
-
-    public RequestSpecification requestWithApiKey() {
-        return RestAssured.given()
-                .header("x-api-key", apiKey)
-                .contentType(ContentType.JSON);
     }
 
     private void createObjectWithAttribute(String attributeKey, String attributeValue) {

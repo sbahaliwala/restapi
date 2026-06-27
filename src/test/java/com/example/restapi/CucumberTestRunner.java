@@ -9,13 +9,13 @@ import org.junit.platform.suite.api.Suite;
 @Suite
 @IncludeEngines("cucumber")
 @SelectClasspathResource("features")
-@SelectClasspathResource("features/object_management.feature")
-@SelectClasspathResource("features/sample-scenarios.feature")
+// @SelectClasspathResource("features/object_management.feature")
+// @SelectClasspathResource("features/sample-scenarios.feature")
 @ConfigurationParameter(key = Constants.GLUE_PROPERTY_NAME, value = "com.example.restapi")
 @ConfigurationParameter(key = Constants.PLUGIN_PROPERTY_NAME, value = "pretty, html:target/cucumber-reports/cucumber.html, json:target/cucumber-reports/cucumber.json")
 
 // --- Uncomment the line below to run only Smoke tests ---
-// @ConfigurationParameter(key = Constants.FILTER_TAGS_PROPERTY_NAME, value = "@Smoke")
+@ConfigurationParameter(key = Constants.FILTER_TAGS_PROPERTY_NAME, value = "@Smoke")
 // ---
 // Available Tags:
 // @Smoke

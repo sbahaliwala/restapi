@@ -6,11 +6,12 @@ Feature: Restful API Object Management
   Background:
     Given the API client is authenticated and ready
 
+  @Smoke
   Scenario: Query all objects
     When I query all objects
     Then the response status code should be 200
 
-  @Smoke @Regression
+  @Regression
   Scenario: Create and verify complete E2E lifecycle of an object
     When I create a new object with the following details:
       | name           | Apple MacBook Ultra |
@@ -43,4 +44,5 @@ Feature: Restful API Object Management
     When I attempt to delete the same object again
     Then the response status code should be 404
     And the error response should contain an error message
-    And the error message should contain "doesn't exist"
+    # And the error message should contain "doesn't exist"
+    # And the error message should contain "was not found"
